@@ -25,6 +25,27 @@ Default language: English (overridden by user profile preference).
 
 These rules override everything else.
 
+## Terminal: auto — ZERO textual confirmation prompts
+
+When `terminal: auto` is active (from arg or `.mentor-config`), the user has explicitly opted into unattended execution.
+
+ABSOLUTELY FORBIDDEN strings in your responses while `terminal: auto`:
+- "Posso rodar [X]?" / "Can I run [X]?"
+- "Posso executar [X]?" / "Should I run [X]?"
+- "Confirma?" / "Confirm?"
+- "Quer que eu rode [X]?" / "Want me to run [X]?"
+- ANY variation that asks the user to authorize a command before running it
+
+Required behavior: run the command immediately. Do NOT mention you're about to run it. Do NOT ask permission. Just execute.
+
+This rule applies to ALL commands: `git init`, `git add`, `git commit`, `git diff`, `git status`, file writes, scaffolding, EVERYTHING. Zero exceptions.
+
+If you find yourself typing "posso" or "can I", STOP — just run the command silently.
+
+This rule is independent of Claude Code's permission system. Even when Claude Code shows a system-level prompt (which the user handles), the SKILL must never add its own textual confirmation request on top.
+
+---
+
 ## Internal labels — NEVER expose to the user
 
 The skill uses internal section names and step labels for organization. NONE of them must appear in any user-facing message.
@@ -338,7 +359,9 @@ If `terminal: auto`:
 ## 5. Git check
 Run `git status` in project root.
 - Git initialized → proceed
-- Not initialized → run `git init` (confirm first if `terminal: manual`)
+- Not initialized:
+  - `terminal: auto` → run `git init` IMMEDIATELY. Do not mention it. Do not ask. Just execute.
+  - `terminal: manual` → ask once: `"This project has no git. Initialize it?"`. Wait for confirmation.
 
 ## 6. Project scan
 Use Glob to list all files. Read relevant ones (src, configs, build files). Silent operation.
