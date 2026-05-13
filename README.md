@@ -1,182 +1,182 @@
 # Professor — Claude Code Skill
 
-Um modo de professor ativo para o Claude Code que acompanha seu projeto em tempo real. Nunca escreve código por você — ensina, desafia e te guia para encontrar as respostas sozinho.
+An active professor mode for Claude Code that accompanies your project in real time. It never writes code for you — it teaches, challenges, and guides you to find the answers yourself.
 
 ---
 
-## Instalação
+## Installation
 
-1. Copie `SKILL.md` para `~/.claude/skills/professor/SKILL.md`
-2. Reinicie o Claude Code
-3. Execute `/professor` para começar
-
----
-
-## Como Funciona
-
-### Primeiro Uso (Perfil Global)
-
-Na primeira chamada de `/professor` em qualquer projeto, um setup único de perfil é executado:
-
-1. **Seleção de idioma** — primeira pergunta, sem texto antes. Suporta Português, Inglês, Espanhol, Francês, Alemão, Italiano, Japonês, Chinês, Coreano e mais.
-2. **Perguntas de perfil** — campos obrigatórios (nome, linguagem foco, objetivo de carreira) seguidos de opcionais (data de nascimento, formação, estilo de aprendizado, área de interesse, maior dor).
-3. **Pergunta da história** — opcional mas de alto impacto. Você descreve sua trajetória em tech em texto livre e/ou compartilha um link de portfólio/GitHub/LinkedIn. O professor lê, extrai contexto e preenche automaticamente os campos opcionais restantes com o que você compartilhou.
-4. **Pergunta da maior dor** — explora bloqueios como síndrome do impostor, inconsistência nos estudos, insegurança, dependência de IA. Usado para calibrar tom e encorajamento em todas as sessões.
-
-O perfil é salvo em `~/.claude/skills/professor/user_profile.md` e reutilizado em todas as sessões futuras. Nunca é perguntado novamente, a menos que você execute `/professor reset-profile`.
-
-> **Detecção de aniversário:** se você informar sua data de nascimento, o professor te dará parabéns no início da sessão no dia do aniversário ou em até 7 dias após.
+1. Copy `SKILL.md` into `~/.claude/skills/professor/SKILL.md`
+2. Restart Claude Code
+3. Run `/professor` to start
 
 ---
 
-### Config por Projeto
+## How It Works
 
-Após o perfil global, cada projeto tem sua própria configuração única:
+### First Run (Global Profile)
 
-- Modo de ensino, idioma, comportamento do terminal, estilo de humor
-- Tipo de projeto (aprendizado vs real/produção)
-- Salvo em `.professor-config` na raiz do projeto (adicionado automaticamente ao `.gitignore`)
+On the very first `/professor` call across all projects, a one-time profile setup runs:
 
-Nas sessões seguintes, a config é carregada silenciosamente e o professor vai direto para perguntar seu objetivo do dia.
+1. **Language selection** — first question, no preamble. Supports English, Portuguese, Spanish, French, German, Italian, Japanese, Chinese, Korean, and more.
+2. **Profile questions** — required fields (name, focus language, career goal) followed by optional ones (birth date, background, learning style, area of interest, biggest pain).
+3. **Story question** — optional but high-impact. You can describe your tech journey in free text and/or share a portfolio/GitHub/LinkedIn URL. The professor reads it, extracts context, and auto-fills any remaining optional fields from what you shared.
+4. **Pain question** — explores blockers like imposter syndrome, inconsistency, self-doubt, or reliance on AI tools. Used to calibrate tone and encouragement throughout all sessions.
 
-Redefina com `/professor reset-project-config`.
+The profile is saved to `~/.claude/skills/professor/user_profile.md` and reused in every future session. It is never asked again unless you run `/professor reset-profile`.
+
+> **Birthday detection:** if you provide your birth date, the professor will wish you a happy birthday at the start of the session on your birthday or within 7 days after.
 
 ---
 
-## Invocação
+### Per-Project Config
+
+After the global profile, each project gets its own one-time configuration:
+
+- Teaching mode, language, terminal behavior, humor style
+- Project type (learning vs real/production)
+- Saved to `.professor-config` in the project root (automatically added to `.gitignore`)
+
+On subsequent sessions, the config is loaded silently and the professor jumps straight to asking your objective for the day.
+
+Reset with `/professor reset-project-config`.
+
+---
+
+## Invocation
 
 ```
-/professor                          → exibe menu de config, depois inicia
-/professor auto                     → define terminal=auto, pula menu, inicia
-/professor misto ptbr auto ironico  → define todas as flags, pula menu, inicia
+/professor                          → show config menu, then start
+/professor auto                     → set terminal=auto, skip menu, start
+/professor misto ptbr auto ironico  → set all flags, skip menu, start
 ```
 
-**Todos os argumentos apenas pré-configuram valores — nunca pulam as perguntas de inicialização.**
+**All arguments only pre-set values — they never skip initialization questions.**
 
-Switch de flag mid-session: `/professor auto` (ou qualquer flag) muda a configuração da sessão atual sem re-executar a inicialização.
+Mid-session flag switch: `/professor auto` (or any flag) changes the setting for the current session without re-running initialization.
 
 ---
 
-## Modos de Ensino
+## Teaching Modes
 
-| Modo | Comportamento |
+| Mode | Behavior |
 |---|---|
-| `questionar` | Nunca explica diretamente. Responde toda pergunta com uma pergunta. |
-| `tutor` | Explica conceitos e teoria. Sem código. |
-| `misto` _(padrão)_ | Explica teoria + guia com perguntas baseadas no contexto. |
+| `questionar` | Never explains directly. Answers every question with a question. |
+| `tutor` | Explains concepts and theory. No code. |
+| `misto` _(default)_ | Explains theory + guides with questions based on context. |
 
 ---
 
-## Estilos de Humor
+## Humor Styles
 
 `serio` `descolado` `ironico` `descolado+ironico` `pirata` `jedi` `coach` `filosofo` `drill` `hacker` `detetive` `rpg` `cientista` `comentarista` `poeta` `robo` `vilao` `vendedor` `shakespeariano`
 
-Cada estilo de humor permeia completamente todas as respostas — elogios, correções, dicas e chamadas de atenção falam no personagem.
+Each humor style fully permeates every response — praise, corrections, hints, and call-outs all speak in character.
 
 ---
 
 ## Strict Mode
 
-Ativado por padrão. Quando o professor detecta um problema real (durante a ronda ou revisão de código), ele:
+Enabled by default. When the professor detects a real problem (during patrol or code review), it:
 
-1. Suspende o humor ativo: `Humor [nome] desativado.`
-2. Entrega uma chamada de atenção direta e séria — mais dura se for **reincidência** (cruzado com o log de problemas da sessão)
-3. Prefixa com empatia se frustração for detectada: _"Entendo sua frustração, mas..."_
-4. Aguarda sua resposta antes de retomar o humor: `Humor [nome] ativado.`
+1. Suspends the active humor: `Humor [name] desativado.`
+2. Delivers a direct, serious call-out — harsher if it's a **repeat offense** (cross-referenced against the session problem log)
+3. Prefixes with empathy if frustration is detected: _"Entendo sua frustração, mas..."_
+4. Waits for your response before resuming humor: `Humor [name] ativado.`
 
-Toggle com `/professor strict off` / `/professor strict on`.
+Toggle with `/professor strict off` / `/professor strict on`.
 
 ---
 
-## Comandos
+## Commands
 
-| Comando | Descrição |
+| Command | Description |
 |---|---|
-| `/professor hint` | Dica progressiva (3 níveis: leve → médio → forte) |
-| `/professor reveal` | Solução completa com explicação detalhada |
-| `/professor debate [tema] [modelo]` | Invoca um segundo professor para debater um tema |
-| `/professor review` | Resumo da sessão: aprendido, pontos fracos, stats |
-| `/professor quiz` | Perguntas rápidas de teoria sobre conceitos da sessão |
-| `/professor concept [termo]` | Explicação aprofundada de um conceito específico |
-| `/professor compare [A] vs [B]` | Comparação pedagógica lado a lado |
-| `/professor pause` | Salva estado da sessão na memória |
-| `/professor resume` | Carrega sessão pausada |
-| `/professor progress` | Lista commits feitos nesta sessão |
-| `/professor glossary` | Novos conceitos introduzidos na sessão |
-| `/professor focus` | Desativa análise proativa temporariamente |
-| `/professor focus off` | Reativa análise proativa |
-| `/professor goal [obj] [prazo]` | Define uma meta de aprendizado com prazo |
-| `/professor resource [tema]` | Sugestões de estudo (sem URLs) |
-| `/professor quick-question [p]` | Resposta rápida sem perder o contexto atual |
-| `/professor re-explain` | Reexplica o último conceito de outro ângulo |
-| `/professor antipattern` | Antipatterns relevantes ao contexto atual do projeto |
-| `/professor achievements` | Lista conquistas acumuladas nas sessões |
-| `/professor history` | Resumo de sessões anteriores da memória |
-| `/professor patrol [5\|10\|15\|off]` | Monitoramento periódico de código (padrão: off) |
-| `/professor challenge [nível]` | Desafio de código integrado (básico/intermediário/avançado/expert) |
-| `/professor strict [on\|off]` | Toggle de chamadas de atenção severas (padrão: on) |
-| `/professor reset-project-config` | Apaga config do projeto e reinicia configuração |
-| `/professor reset-profile` | Apaga perfil global e reinicia onboarding |
+| `/professor hint` | Progressive hint (3 levels: light → medium → strong) |
+| `/professor reveal` | Full solution with detailed explanation |
+| `/professor debate [topic] [model]` | Spawns a second professor to debate a topic |
+| `/professor review` | Session summary: learned, weak points, stats |
+| `/professor quiz` | Quick theory questions on session concepts |
+| `/professor concept [term]` | Deep explanation of a specific concept |
+| `/professor compare [A] vs [B]` | Pedagogical side-by-side comparison |
+| `/professor pause` | Save session state to memory |
+| `/professor resume` | Load paused session |
+| `/professor progress` | List commits made this session |
+| `/professor glossary` | New concepts introduced this session |
+| `/professor focus` | Disable proactive analysis temporarily |
+| `/professor focus off` | Re-enable proactive analysis |
+| `/professor goal [obj] [deadline]` | Set a learning goal with a deadline |
+| `/professor resource [topic]` | Study resource suggestions (no URLs) |
+| `/professor quick-question [q]` | Fast answer without losing context |
+| `/professor re-explain` | Re-explain last concept from a different angle |
+| `/professor antipattern` | Antipatterns relevant to current project context |
+| `/professor achievements` | List accumulated achievements across sessions |
+| `/professor history` | Summary of previous sessions from memory |
+| `/professor patrol [5\|10\|15\|off]` | Periodic code monitoring (default: off) |
+| `/professor challenge [level]` | Integrated coding challenge (básico/intermediário/avançado/expert) |
+| `/professor strict [on\|off]` | Toggle harsh call-outs (default: on) |
+| `/professor reset-project-config` | Delete project config and re-run initialization |
+| `/professor reset-profile` | Delete global profile and re-run onboarding |
 
-Todos os comandos também aceitam linguagem natural: _"me dá uma dica"_, _"quero ver a resposta"_, _"ativa o ronda"_, etc.
-
----
-
-## Modo Ronda (Patrol)
-
-`/professor patrol [5|10|15]` ativa monitoramento periódico via wake-ups agendados.
-
-A cada gatilho:
-- Executa `git diff HEAD`
-- Silencioso se não houver mudanças
-- Posta uma observação pedagógica breve se houver mudanças
-- Aciona chamada de atenção do strict mode se um problema real for detectado
+All commands also accept natural language: _"me dá uma dica"_, _"quero ver a resposta"_, _"ativa o ronda"_, etc.
 
 ---
 
-## Desafios de Código
+## Patrol Mode
 
-`/professor challenge [nível]` inicia um desafio integrado na sessão do professor:
+`/professor patrol [5|10|15]` activates periodic monitoring via scheduled wake-ups.
 
-- Linguagem reutilizada da inicialização — nunca perguntada novamente
-- Nível lembrado após o primeiro desafio da sessão
-- Professor nunca escreve código de solução nem dá dicas algorítmicas
-- `/ff` revela a solução completa com explicação
-- Desafios concluídos são commitados e rastreados nas stats da sessão
-
----
-
-## Nível Adaptativo
-
-O professor monitora o desempenho ao longo das dicas usadas, reveals acionados e velocidade de resolução. Ajusta a complexidade silenciosamente ao longo do tempo e atualiza o nível na memória entre sessões.
+On each trigger:
+- Runs `git diff HEAD`
+- Silent if no changes
+- Posts a brief pedagogical observation if changes are found
+- Triggers strict mode call-out if a real problem is detected
 
 ---
 
-## Memória e Persistência
+## Coding Challenges
 
-| Arquivo | Propósito |
+`/professor challenge [level]` launches an integrated challenge inside the professor session:
+
+- Language reused from initialization — never asked again
+- Level remembered after first challenge in a session
+- Professor never writes solution code or gives algorithmic hints
+- `/ff` reveals the full solution with explanation
+- Solved challenges are committed and tracked in session stats
+
+---
+
+## Adaptive Level
+
+The professor monitors performance across hints used, reveals triggered, and problem-solving speed. It silently adjusts complexity over time and updates the level in memory across sessions.
+
+---
+
+## Memory & Persistence
+
+| File | Purpose |
 |---|---|
-| `~/.claude/skills/professor/user_profile.md` | Perfil global do usuário (uma vez por usuário) |
-| `[projeto]/.professor-config` | Config de sessão por projeto |
-| `[projeto]/.claude/memory/professor_sessions.md` | Histórico de sessões e rastreamento de streak |
-| `[projeto]/.claude/memory/professor_problem_log.md` | Log de problemas para detecção de reincidência no strict mode |
+| `~/.claude/skills/professor/user_profile.md` | Global user profile (once per user) |
+| `[project]/.professor-config` | Per-project session config |
+| `[project]/.claude/memory/professor_sessions.md` | Session history and streak tracking |
+| `[project]/.claude/memory/professor_problem_log.md` | Problem log for strict mode repeat detection |
 
 ---
 
-## Suporte a Plataformas
+## Platform Support
 
-Detecta a plataforma em runtime:
-- **Windows** → usa PowerShell para todas as operações de shell
-- **macOS / Linux** → usa Bash para todas as operações de shell
+Detects platform at runtime:
+- **Windows** → uses PowerShell tool for all shell operations
+- **macOS / Linux** → uses Bash tool for all shell operations
 
-Quando `terminal: auto` está ativo, `.claude/settings.json` é escrito na raiz do projeto **imediatamente** — antes de qualquer pergunta — para que nenhum prompt de permissão apareça durante a sessão.
+When `terminal: auto` is active, `.claude/settings.json` is written to the project root **immediately** — before any question is asked — so no permission prompts appear during the session.
 
 ---
 
-## O Que o Professor Nunca Faz
+## What the Professor Never Does
 
-- Escrever código funcional por você
-- Dar a resposta antes de `/professor reveal` ou `/ff`
-- Pular etapas de inicialização por causa de argumentos passados
-- Expor labels internas de roteamento (PATH-A, PATH-B, STEP N) em qualquer mensagem
-- Gerar URLs para recursos
+- Write functional code for you
+- Give the answer before `/professor reveal` or `/ff`
+- Skip initialization steps based on arguments passed
+- Expose internal routing labels (PATH-A, PATH-B, STEP N) in any message
+- Generate URLs for resources
