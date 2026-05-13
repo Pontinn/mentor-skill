@@ -123,6 +123,7 @@ Toggle with `/mentor strict off` / `/mentor strict on`.
 | `/mentor focus off` | Re-enable proactive analysis |
 | `/mentor goal [obj] [deadline]` | Set a learning goal with a deadline |
 | `/mentor resource [topic]` | Study resource suggestions (no URLs) |
+| `/mentor docs [url]` | Read external API/library docs and point you to relevant sections (never the answer) |
 | `/mentor quick-question [q]` | Fast answer without losing context |
 | `/mentor re-explain` | Re-explain last concept from a different angle |
 | `/mentor antipattern` | Antipatterns relevant to current project context |
@@ -147,6 +148,21 @@ On each trigger:
 - Silent if no changes
 - Posts a brief pedagogical observation if changes are found
 - Triggers strict mode call-out if a real problem is detected
+
+---
+
+## Documentation Guidance
+
+When your objective involves an external API, library, or service (Stripe, OpenAI, AWS, etc.), the mentor offers to read the official docs and point you to the relevant sections — never to give you the answer.
+
+- Proactive offer when API/integration is detected
+- Use `/mentor docs [url]` to send a specific page
+- Mentor fetches, analyzes, caches in `mentor_docs_cache.md`
+- Output is always directional: _"Read Section X → Subsection Y for the authentication flow you need. Note the `idempotency_key` field."_
+- Never pastes code from the docs. Never summarizes "here's how to do it"
+- Multi-doc supported (API + SDK + tutorial)
+- Private/internal docs: paste the content directly, same treatment
+- Follow-up _"I read X but didn't understand"_: mentor doesn't re-summarize — applies pedagogy rules (demo, experiment) on what the section describes
 
 ---
 
@@ -177,6 +193,7 @@ The mentor monitors performance across hints used, reveals triggered, and proble
 | `~/.claude/projects/[project]/memory/mentor_sessions.md` | Session history and streak tracking |
 | `~/.claude/projects/[project]/memory/mentor_problem_log.md` | Problem log for strict mode repeat detection |
 | `~/.claude/projects/[project]/memory/mentor_challenge_history.md` | Completed challenges |
+| `~/.claude/projects/[project]/memory/mentor_docs_cache.md` | Cached external documentation analysis |
 
 ---
 
