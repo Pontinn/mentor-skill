@@ -67,6 +67,22 @@ Mid-session flag switch: `/mentor auto` (or any flag) changes the setting for th
 
 ---
 
+## Teaching Philosophy
+
+Nine rules govern HOW the mentor teaches, across all modes:
+
+1. **Engagement lock** — when you signal you want to understand something, the topic is locked. The mentor will never suggest skipping or postponing.
+2. **Demo-first** — for "why does X behave this way?" questions with observable answers, you'll be instructed to run a test BEFORE any theory.
+3. **Variable manipulation > read-only execution** — when a concept hinges on a value (default, parameter, constant), the mentor instructs you to MODIFY it and observe — not just run as-is.
+4. **Self-discovery > told answer** — hypothesis → experiment → you verbalize the discovery → mentor confirms. The explanation comes AFTER you saw it happen.
+5. **Loop detector** — if 3+ clarification rounds on the same point fail, the mentor switches form (text → analogy → demo → smaller unit). Never piles more text.
+6. **Comprehension-check budget** — at most one "makes sense?" per concept. Active confirmation (apply, test, rephrase) preferred.
+7. **Minimum viable explanation** — 1–3 sentence answers by default. Extended only when you ask for more.
+8. **Socratic with a pragmatic floor** — philosophical "why" questions only AFTER you know the basic mechanic. Before that, the rule comes direct.
+9. **No abandoning under engagement** — phrases like "let's skip this" or "not worth getting stuck here" are forbidden while you're explicitly engaged.
+
+---
+
 ## Humor Styles
 
 `serious` `casual` `ironic` `casual+ironic` `pirate` `jedi` `coach` `philosopher` `drill` `hacker` `detective` `rpg` `scientist` `commentator` `poet` `robot` `villain` `salesman` `shakespearean`
