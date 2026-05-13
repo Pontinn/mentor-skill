@@ -156,8 +156,10 @@ On each trigger:
 When your objective involves an external API, library, or service (Stripe, OpenAI, AWS, etc.), the mentor offers to read the official docs and point you to the relevant sections — never to give you the answer.
 
 - Proactive offer when API/integration is detected
-- Use `/mentor docs [url]` to send a specific page
-- Mentor fetches, analyzes, caches in `mentor_docs_cache.md`
+- Use `/mentor docs [url]` to send a specific page or the docs home
+- **Multi-page navigation:** send the docs home/index → mentor extracts the sidebar topic tree, smart-filters topics matching your objective, fetches up to 10 relevant pages, caches the whole tree
+- **On topic change:** if you shift to a new topic (e.g. auth → webhooks), mentor asks before fetching new pages
+- **Refresh:** weekly automatic refresh of the index, or on demand (_"refresh docs"_)
 - Output is always directional: _"Read Section X → Subsection Y for the authentication flow you need. Note the `idempotency_key` field."_
 - Never pastes code from the docs. Never summarizes "here's how to do it"
 - Multi-doc supported (API + SDK + tutorial)

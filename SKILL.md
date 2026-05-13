@@ -938,6 +938,7 @@ Examples (English shown — equivalents exist in every supported language):
 | "reconfigure profile" | `/mentor reset-profile` |
 | "read this doc", "analyze this documentation", "leia essa doc" + URL | `/mentor docs [url]` |
 | "I read section X but didn't understand" | doc follow-up flow (see DOC-GUIDANCE) |
+| "refresh docs", "update docs", "atualiza a documentação" | refetch index + relevant pages (DOC-GUIDANCE refresh) |
 
 Apply the same recognition logic to equivalent phrases in the user's chosen language.
 
@@ -1022,22 +1023,57 @@ Do not repeat the offer in the same session if the user declined or already prov
 
 ## On URL receipt
 
-1. Use the **WebFetch tool** to fetch the documentation page.
-2. Extract relevant sections for the user's stated objective.
-3. Append to `~/.claude/projects/[project]/memory/mentor_docs_cache.md`:
+### Step 1 — Classify the URL
+
+Inspect the URL and the fetched page to determine type:
+- **Single page** (e.g. `/docs/api/charges/create`) → handle as a single doc page (skip to Step 3 single-page branch).
+- **Home/index** of a docs site (e.g. `/docs`, `/docs/`, root with sidebar nav, "Getting Started" landing) → run multi-page navigation (Step 2).
+
+### Step 2 — Multi-page navigation (home/index URL)
+
+1. **WebFetch** the index page.
+2. **Extract the navigation tree** from sidebar / topic menu / table of contents. Save full topic tree to `mentor_docs_cache.md`:
    ```markdown
-   ## [URL] — fetched [date]
+   ## [base URL] — index fetched [date] — last refresh [date]
+   **Title:** [site title]
+   **Navigation tree:**
+   - Topic A
+     - Subtopic A.1 → [URL]
+     - Subtopic A.2 → [URL]
+   - Topic B
+     - Subtopic B.1 → [URL]
+   ...
+   ```
+3. **Smart-filter (mode A):** identify which sections match the user's stated objective. Score relevance internally.
+4. **Fetch the top N relevant pages** — **maximum 10 pages per initial batch**. Use WebFetch for each. Append each fetched page to cache:
+   ```markdown
+   ### [page URL] — fetched [date]
    **Title:** [page title]
-   **Sections:** [section list]
-   **Relevant for objective:** [user objective]
-   **Key sections for this objective:**
-   - [section name] → [one-line why it's relevant]
+   **Why fetched:** [user objective it relates to]
+   **Key content for objective:**
    - [section name] → [one-line why it's relevant]
    ```
-4. Reply to user with directional guidance ONLY:
-   - `"For [objective], read [section name] → [subsection]. That's where [what to find]."`
-   - May call out one specific field, parameter, or concept that's easy to miss.
-   - NEVER paste code from the docs. NEVER summarize "here's how to do it".
+5. **If objective is vague** (mentor cannot confidently pick 10 relevant pages): fall back to **mode B** — ask the user: `"This doc has the following topics: [tree]. Which topic do you want to dig into first?"` Then fetch only the chosen topic's pages.
+
+### Step 3 — Reply to user
+
+Directional guidance only:
+- `"For [objective], read [section name] → [subsection]. That's where [what to find]."`
+- May call out one specific field, parameter, or concept easy to miss.
+- NEVER paste code from the docs. NEVER summarize "here's how to do it".
+
+## Topic change during session
+
+If the user's objective shifts to a different topic (e.g. started with authentication, now wants webhooks) and the relevant pages were NOT in the initial 10:
+
+1. Detect the topic change from conversation context.
+2. **Ask before fetching:** `"This is a different topic from before — webhooks. Want me to fetch the Webhooks section of the docs you sent earlier?"`
+3. Only fetch on confirmation. Apply same 10-page max.
+
+## Refresh policy
+
+- **Automatic:** if cached index entry is older than **7 days**, refresh the index on next access. Compare new tree to cached — note any new sections.
+- **On demand:** user says `"refresh docs"` / `"update docs"` / `"the docs changed"` → refetch immediately.
 
 ## Multi-doc
 
