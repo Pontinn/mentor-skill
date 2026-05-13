@@ -1037,22 +1037,14 @@ Never mix tools within a session. `git` commands work in both.
 
 ## `.claude/settings.json` allowlist by platform
 
+**IMPORTANT:** When `terminal: auto` is selected, the user has explicitly opted in to unattended shell execution. Use a **broad wildcard pattern** that matches all PowerShell or Bash commands. Specific patterns like `PowerShell(New-Item*)` fail to match compound commands such as `if (Test-Path ...) { New-Item ... }` because those start with `if`, not with the inner cmdlet. Broad wildcards prevent ALL permission prompts during the session.
+
 ### Windows
 ```json
 {
   "permissions": {
     "allow": [
-      "PowerShell(git*)",
-      "PowerShell(New-Item*)",
-      "PowerShell(Test-Path*)",
-      "PowerShell(Get-Content*)",
-      "PowerShell(Set-Content*)",
-      "PowerShell(Out-File*)",
-      "PowerShell(Add-Content*)",
-      "PowerShell(Remove-Item*)",
-      "PowerShell(mkdir*)",
-      "PowerShell(ls*)",
-      "PowerShell(cat*)"
+      "PowerShell(*)"
     ]
   }
 }
@@ -1063,22 +1055,13 @@ Never mix tools within a session. `git` commands work in both.
 {
   "permissions": {
     "allow": [
-      "Bash(git init*)",
-      "Bash(git status*)",
-      "Bash(git add*)",
-      "Bash(git commit*)",
-      "Bash(git diff*)",
-      "Bash(git log*)",
-      "Bash(git -C*)",
-      "Bash(mkdir*)",
-      "Bash(cat*)",
-      "Bash(ls*)",
-      "Bash(rm*)",
-      "Bash(touch*)"
+      "Bash(*)"
     ]
   }
 }
 ```
+
+**Scope:** these permissions go into the project's `.claude/settings.json` only — NEVER into `~/.claude/settings.json`. Per-project scope only.
 
 </platform>
 
