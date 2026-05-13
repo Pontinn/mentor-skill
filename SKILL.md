@@ -107,8 +107,9 @@ If `terminal: auto` is known at this point (from arg or saved config):
 
 ### Step 2a — Check existing settings
 Use the **Read tool** to check if `.claude/settings.json` exists in the project root.
-- If it exists AND already contains `"PowerShell(*)"` (Windows) or `"Bash(*)"` (macOS/Linux) in the allowlist → SKIP the write. Permissions are already in place. No prompt will appear.
-- If it does NOT exist OR does not contain the broad pattern → proceed to Step 2b.
+- If it exists AND already contains the full allowlist (shell tool + `Write(*)` + `Edit(*)` + `Read(*)`) → SKIP the write. Permissions are already in place.
+- If it exists but the allowlist is incomplete → merge (read, add missing entries, write back).
+- If it does NOT exist → proceed to Step 2b.
 
 ### Step 2b — Write settings (only if needed)
 Use the **Write tool** (NOT Bash/PowerShell) to create or update `.claude/settings.json`.
@@ -1076,14 +1077,20 @@ For `.claude/settings.json` and `.gitignore`: use the **Write tool**, not any sh
 
 ## `.claude/settings.json` allowlist by platform
 
-**IMPORTANT:** When `terminal: auto` is selected, the user has explicitly opted in to unattended shell execution. Use a **broad wildcard pattern** that matches all PowerShell or Bash commands. Specific patterns like `PowerShell(New-Item*)` fail to match compound commands such as `if (Test-Path ...) { New-Item ... }` because those start with `if`, not with the inner cmdlet. Broad wildcards prevent ALL permission prompts during the session.
+**IMPORTANT:** When `terminal: auto` is selected, the user has explicitly opted in to unattended execution. Allowlist must cover BOTH shell tools AND file-write tools (Write, Edit) — Claude Code prompts for each tool family separately.
+
+Compound shell commands (e.g. `if (...) { ... }`) start with `if`, not the inner cmdlet, so narrow patterns fail to match. Use broad wildcards.
 
 ### Windows
 ```json
 {
   "permissions": {
     "allow": [
-      "PowerShell(*)"
+      "PowerShell(*)",
+      "Bash(*)",
+      "Write(*)",
+      "Edit(*)",
+      "Read(*)"
     ]
   }
 }
@@ -1094,7 +1101,10 @@ For `.claude/settings.json` and `.gitignore`: use the **Write tool**, not any sh
 {
   "permissions": {
     "allow": [
-      "Bash(*)"
+      "Bash(*)",
+      "Write(*)",
+      "Edit(*)",
+      "Read(*)"
     ]
   }
 }
