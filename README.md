@@ -155,16 +155,47 @@ On each trigger:
 
 When your objective involves an external API, library, or service (Stripe, OpenAI, AWS, etc.), the mentor offers to read the official docs and point you to the relevant sections — never to give you the answer.
 
-- Proactive offer when API/integration is detected
-- Use `/mentor docs [url]` to send a specific page or the docs home
-- **Multi-page navigation:** send the docs home/index → mentor extracts the sidebar topic tree, smart-filters topics matching your objective, fetches up to 10 relevant pages, caches the whole tree
-- **On topic change:** if you shift to a new topic (e.g. auth → webhooks), mentor asks before fetching new pages
-- **Refresh:** weekly automatic refresh of the index, or on demand (_"refresh docs"_)
-- Output is always directional: _"Read Section X → Subsection Y for the authentication flow you need. Note the `idempotency_key` field."_
-- Never pastes code from the docs. Never summarizes "here's how to do it"
-- Multi-doc supported (API + SDK + tutorial)
-- Private/internal docs: paste the content directly, same treatment
-- Follow-up _"I read X but didn't understand"_: mentor doesn't re-summarize — applies pedagogy rules (demo, experiment) on what the section describes
+### Trigger
+
+- **Proactive offer** — mentor detects API/integration/named service in conversation and offers to read the docs once per session
+- **Explicit invocation** — `/mentor docs [url]`
+- **Pasted content** — for private/internal docs, paste the section directly; same treatment
+
+### Single page vs full docs
+
+| Input | What mentor does |
+|---|---|
+| Single page URL (e.g. `/docs/api/charges/create`) | Fetches that page, extracts relevant sections for your objective, caches |
+| Docs home/index URL (e.g. `/docs`) | Extracts the **full sidebar/topic tree**, smart-filters topics by your objective, fetches up to **10 relevant pages**, caches everything |
+| Pasted content | Same analysis treatment — no fetch needed |
+
+### Multi-page navigation modes
+
+- **Mode A (default) — Smart-filter** — mentor picks the top 10 pages matching your objective automatically
+- **Mode B — Topic-on-demand** — fallback when objective is too vague to pick confidently. Mentor shows you the topic tree and asks which topic to explore first
+- **Topic change mid-session** — if you shift subjects (auth → webhooks), mentor **asks before fetching** new pages, same 10-page max
+
+### Cache and refresh
+
+- Everything cached in `~/.claude/projects/[project]/memory/mentor_docs_cache.md`
+- Index tree saved separately from per-page analysis
+- **Automatic refresh:** if cached index is older than 7 days, refetch on next access
+- **On-demand refresh:** _"refresh docs"_ / _"update docs"_ triggers immediate refetch
+- Multi-doc supported — API + SDK + tutorial can coexist in the same project cache
+
+### Output discipline
+
+Mentor responses about docs ALWAYS look like:
+> _"For [objective], read [Section X] → [Subsection Y]. That's where [what to find]. Note the `idempotency_key` field — easy to miss."_
+
+Mentor responses NEVER look like:
+> ~_"Here's how you authenticate: `const client = new Stripe(...)`"_~
+
+### Follow-up
+
+When you say _"I read X but didn't understand"_:
+- Mentor doesn't re-summarize the section
+- Applies PEDAGOGY rules: demo-first, variable manipulation, experiment-leading questions on what the section describes
 
 ---
 
