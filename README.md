@@ -19,13 +19,11 @@ An active mentor mode for Claude Code that accompanies your project in real time
 On the very first `/mentor` call across all projects, a one-time profile setup runs:
 
 1. **Language selection** — first question, no preamble. Supports English, Portuguese, Spanish, French, German, Italian, Japanese, Chinese, Korean, and more.
-2. **Profile questions** — required fields (name, focus language, career goal) followed by optional ones (birth date, background, learning style, area of interest, biggest pain).
+2. **Profile questions** — required fields (name, focus language, career goal) followed by optional ones (background, learning style, area of interest, biggest pain).
 3. **Story question** — optional but high-impact. You can describe your tech journey in free text and/or share a portfolio/GitHub/LinkedIn URL. The mentor reads it, extracts context, and auto-fills any remaining optional fields from what you shared.
 4. **Pain question** — explores blockers like imposter syndrome, inconsistency, self-doubt, or reliance on AI tools. Used to calibrate tone and encouragement throughout all sessions.
 
 The profile is saved to `~/.claude/skills/mentor/user_profile.md` and reused in every future session. It is never asked again unless you run `/mentor reset-profile`.
-
-> **Birthday detection:** if you provide your birth date, the mentor will wish you a happy birthday at the start of the session on your birthday or within 7 days after.
 
 ---
 

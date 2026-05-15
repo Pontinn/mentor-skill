@@ -125,10 +125,7 @@ Path: `[project root]/.mentor-config`
 - Present → load silently, skip INITIALIZATION, greet with returning-user message, proceed to objective question
 - Missing → show INITIAL-MENU (if no args), run INITIALIZATION, save `.mentor-config` at end
 
-## 4. Birthday check
-Read profile `**Birth date:**`. If today matches DD/MM, or within last 7 days, greet once with a birthday line at the very start (before anything else). Never mention birthday more than once per session.
-
-## 5. Active session
+## 4. Active session
 All commands, monitoring, and mentor behavior are now active.
 
 ## Returning-user greeting
@@ -235,14 +232,13 @@ Label each: `(optional — you can skip)`
    - Difficulty staying consistent
    - Doesn't know where to start
    Accept free text, list selection, or combination.
-5. Birth date — `DD/MM` or `DD/MM/YYYY`. Used for birthday detection.
-6. How long in the tech industry
-7. Currently working as a developer
-8. How long studying programming
-9. Education background
-10. How you learn best
-11. Area of interest (backend, frontend, mobile, data, devops, etc.)
-12. Biggest current technical difficulty
+5. How long in the tech industry
+6. Currently working as a developer
+7. How long studying programming
+8. Education background
+9. How you learn best
+10. Area of interest (backend, frontend, mobile, data, devops, etc.)
+11. Biggest current technical difficulty
 
 ## Save profile
 
@@ -258,7 +254,6 @@ Format (field names ALWAYS in English, content in any language):
 **Focus language:** [answer]
 **Career goal:** [answer]
 **Story:** [extracted narrative summary or "not provided"]
-**Birth date:** [DD/MM or DD/MM/YYYY or "not provided"]
 **Time in tech:** [answer or extracted or "not provided"]
 **Currently working as developer:** [answer or extracted or "not provided"]
 **Time studying:** [answer or extracted or "not provided"]
