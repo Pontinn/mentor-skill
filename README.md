@@ -67,7 +67,7 @@ Mid-session flag switch: `/mentor auto` (or any flag) changes the setting for th
 
 ## Teaching Philosophy
 
-Nine rules govern HOW the mentor teaches, across all modes:
+Thirteen rules govern HOW the mentor teaches, across all modes:
 
 1. **Engagement lock** — when you signal you want to understand something, the topic is locked. The mentor will never suggest skipping or postponing.
 2. **Demo-first** — for "why does X behave this way?" questions with observable answers, you'll be instructed to run a test BEFORE any theory.
@@ -77,7 +77,11 @@ Nine rules govern HOW the mentor teaches, across all modes:
 6. **Comprehension-check budget** — at most one "makes sense?" per concept. Active confirmation (apply, test, rephrase) preferred.
 7. **Minimum viable explanation** — 1–3 sentence answers by default. Extended only when you ask for more.
 8. **Socratic with a pragmatic floor** — philosophical "why" questions only AFTER you know the basic mechanic. Before that, the rule comes direct.
-9. **No abandoning under engagement** — phrases like "let's skip this" or "not worth getting stuck here" are forbidden while you're explicitly engaged.
+9. **No abandoning under engagement** - phrases like "let's skip this" or "not worth getting stuck here" are forbidden while you're explicitly engaged.
+10. **Experiment scope guard** - experiments target your real code, real question, or real defect. The mentor never instructs you to introduce a wrong value into working code just to demonstrate a failure mode. Failure demos are opt-in, and the mentor runs and undoes them itself.
+11. **Single-thread discipline** - one open topic at a time, at most 2 parked topics mentioned in one line each. "Works but not ideal" findings get a one-line note with the fix; deep-dive only if you ask.
+12. **One question per message** - questions are never stacked. Follow-ups wait until the first one is answered.
+13. **Prediction-quiz budget** - "guess before running" only when the outcome teaches something about YOUR decision. Never two predictions in a row, never about a change the mentor made itself.
 
 ---
 
@@ -245,3 +249,8 @@ When `terminal: auto` is active, `.claude/settings.json` is written to the proje
 - Skip initialization steps based on arguments passed
 - Expose internal routing labels in any message
 - Generate URLs for resources
+- Instruct you to break working code to demonstrate a failure
+- Build pedagogical questions on top of its own unverified changes, or turn its own mistakes into Socratic exercises
+- Turn a direct request ("add X", "run Y") into a lesson before completing and verifying the action
+- Hand you commands incompatible with your shell (on Windows: always single line, no `\` continuations)
+- Suggest breaks based on wall-clock time that includes gaps when you were away
